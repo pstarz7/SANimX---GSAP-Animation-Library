@@ -507,7 +507,6 @@ Let’s connect!
 ## 🔗 Links
 [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://my-portfolio-pb7.netlify.app/)
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/papu-badatya-759767254/)
-[![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/)
 
 
 ![Logo](https://github.com/pstarz7/gsap-animation-library/blob/9f19a8cdc33e69e3761bd3b93cdf9297a93ce870/SANimX.png)
