@@ -2,6 +2,12 @@
 
 A ready-to-use GSAP animation library that you can simply copy and paste into your projects.
 
+## Screenshots
+
+![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+
+
+
 ## Features
 
 - Easy Installation
