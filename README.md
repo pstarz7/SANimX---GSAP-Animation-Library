@@ -4,7 +4,7 @@ A ready-to-use GSAP animation library that you can simply copy and paste into yo
 
 ## Screenshots
 
-![logo]([https://via.placeholder.com/468x300?text=App+Screenshot+Here](https://github.com/pstarz7/SANimX---GSAP-Animation-Library/blob/51cd3acbc73884d9d8c038cfd37562fc985346e3/Screenshot%202025-04-22%20121216.png))
+![logo](https://github.com/pstarz7/SANimX---GSAP-Animation-Library/blob/364c64b3ec189d8043724d2557d3d68983662385/Screenshot%202025-04-22%20121216.png)
 
 
 
