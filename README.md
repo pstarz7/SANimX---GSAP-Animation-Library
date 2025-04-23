@@ -17,6 +17,8 @@ A ready-to-use GSAP animation library that you can simply copy and paste into yo
 - Quick Start Examples
 - Animation Catalog
 - Easing Functions Reference
+- Advance GSAP Effect's
+
 
 ## Installation
 
