@@ -1,6 +1,6 @@
 [![Open Source](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
-## 📜 License  
-SANimX is open-source and released under the [MIT License](LICENSE).  
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 # **SANimX:** Open-Source GSAP Animation Library
 A ready-to-use GSAP animation library that you can simply copy and paste into your projects.
 
