@@ -394,7 +394,8 @@ function cardReveal(cards, stagger = 0.1, duration = 0.5) {
 }
  ```
 
-## SIMPLE NAV ANIMATIONS 
+# SIMPLE NAV ANIMATIONS 
+
  ###  Navigation Animations Up-Down
 
 ```CSS
@@ -482,6 +483,9 @@ tl.from("a",{
          gsap.from(".nav-item", { opacity: 0, y: 20, duration: 0.6, stagger: 0.2, ease: "power2.out" });
 
  ```
+
+
+# Cards Effects
 
 ### 3D Card Flip on Scroll
 
@@ -1932,7 +1936,7 @@ Effect: Foreground video scrubs while background video plays continuously
   </button>
 ```
 
-#Stay Update with SANimX For Upcoming Effects
+# Stay Update with SANimX For Upcoming Effects
 
 ###
 ```CSS
