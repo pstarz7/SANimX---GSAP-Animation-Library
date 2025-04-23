@@ -550,6 +550,234 @@ tl.from("a",{
     });
 ```
 
+### Morphing Card (Mobile-Friendly)
+
+```CSS
+    .morph-container {
+      padding: 100px 2rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .morph-card {
+      width: 90%;
+      max-width: 500px;
+      height: 300px;
+      background: #6E40F7;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      will-change: border-radius, background;
+    }
+
+    @media (max-width: 600px) {
+      .morph-card {
+        height: 200px;
+      }
+    }
+
+```
+
+```HTML
+ <div class="morph-container">
+    <div class="morph-card">
+      <h2>Scroll Down</h2>
+    </div>
+  </div>
+```
+
+
+```javascript
+   gsap.registerPlugin(ScrollTrigger);
+
+    // Set up the animation timeline
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".morph-container",
+        start: "top center",
+        end: "+=1000",
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1,
+        markers: false // Set to true for debugging
+      }
+    });
+
+    // Morph animation sequence
+    tl.to(".morph-card", {
+      borderRadius: "50%",
+      background: "#00F0B5",
+      duration: 0.5
+    })
+    .to(".morph-card", {
+      borderRadius: "10px",
+      background: "#FF4D4D",
+      duration: 0.5
+    })
+    .to(".morph-card", {
+      borderRadius: "0",
+      background: "#F9CB28",
+      duration: 0.5
+    })
+    .to(".morph-card", {
+      borderRadius: "20px",
+      background: "#6E40F7",
+      duration: 0.5
+    });
+
+    // Mobile fallback
+    if (window.innerWidth < 768) {
+      ScrollTrigger.getById(tl.scrollTrigger.id).kill();
+      gsap.to(".morph-card", {
+        scrollTrigger: {
+          trigger: ".morph-container",
+          start: "top center",
+          toggleActions: "play none none none"
+        },
+        background: "#00F0B5",
+        duration: 1
+      });
+    }
+```
+
+
+
+### Floating Label Input (3D Tilt on Focus)
+
+```CSS
+  .input-section {
+      padding: 4rem 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .input-group {
+      position: relative;
+      margin-bottom: 2rem;
+      perspective: 1000px;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    
+    .input-field {
+      width: 100%;
+      padding: 1.2rem 1rem 0.5rem;
+      border: none;
+      border-bottom: 2px solid #6E40F7;
+      background: rgba(110, 64, 247, 0.05);
+      border-radius: 8px 8px 0 0;
+      font-size: 1rem;
+      transition: all 0.3s;
+      transform-style: preserve-3d;
+    }
+    
+    .input-label {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6E40F7;
+      transition: all 0.3s;
+      pointer-events: none;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      background: rgba(110, 64, 247, 0.1);
+      box-shadow: 0 5px 15px rgba(110, 64, 247, 0.2);
+    }
+    
+    .input-field:focus + .input-label,
+    .input-field:not(:placeholder-shown) + .input-label {
+      top: 0.8rem;
+      transform: translateY(0) scale(0.8);
+      color: #00F0B5;
+    }
+    
+    @media (max-width: 600px) {
+      .input-section {
+        padding: 2rem 1rem;
+      }
+    }
+```
+
+```HTML
+  <section class="input-section">
+    <div class="input-group">
+      <input type="text" class="input-field" id="name" placeholder=" ">
+      <label for="name" class="input-label">Full Name</label>
+    </div>
+    
+    <div class="input-group">
+      <input type="email" class="input-field" id="email" placeholder=" ">
+      <label for="email" class="input-label">Email Address</label>
+    </div>
+    
+    <div class="input-group">
+      <input type="password" class="input-field" id="password" placeholder=" ">
+      <label for="password" class="input-label">Password</label>
+    </div>
+  </section>
+```
+```javascript
+    gsap.registerPlugin(ScrollTrigger);
+    
+    // Scroll-triggered entrance
+    gsap.to(".input-group", {
+      scrollTrigger: {
+        trigger: ".input-section",
+        start: "top 70%",
+        toggleActions: "play none none none"
+      },
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: "back.out(1.7)"
+    });
+    
+    // 3D tilt on focus
+    document.querySelectorAll('.input-field').forEach(input => {
+      input.addEventListener('focus', () => {
+        gsap.to(input, {
+          rotationY: 5,
+          rotationX: 2,
+          duration: 0.5,
+          ease: "power2.out"
+        });
+      });
+      
+      input.addEventListener('blur', () => {
+        gsap.to(input, {
+          rotationY: 0,
+          rotationX: 0,
+          duration: 0.7,
+          ease: "elastic.out(1, 0.5)"
+        });
+      });
+    });
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## 🚀 About Me
 **Papu Badatya**
