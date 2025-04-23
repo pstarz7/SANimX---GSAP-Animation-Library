@@ -1,5 +1,5 @@
 # SANimX - GSAP Animation Library
-
+[![Open Source](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
 A ready-to-use GSAP animation library that you can simply copy and paste into your projects.
 
 ## Screenshots
