@@ -482,6 +482,74 @@ tl.from("a",{
          gsap.from(".nav-item", { opacity: 0, y: 20, duration: 0.6, stagger: 0.2, ease: "power2.out" });
 
  ```
+### 3D Card Flip on Scroll
+
+```CSS
+   .card-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 100px 0;
+      perspective: 1000px;
+    }
+    
+    .card {
+      width: 300px;
+      height: 400px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s;
+    }
+    
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: white;
+    }
+    
+    .card-front {
+      background: linear-gradient(45deg, #6E40F7, #00F0B5);
+    }
+    
+    .card-back {
+      background: linear-gradient(45deg, #FF4D4D, #F9CB28);
+      transform: rotateY(180deg);
+    }
+```
+
+```HTML
+  <div class="card-container">
+    <div class="card">
+      <div class="card-front">Front Content</div>
+      <div class="card-back">Back Content</div>
+    </div>
+    <!-- Add more cards as needed -->
+  </div>
+```
+```javascript
+   gsap.registerPlugin(ScrollTrigger);
+    
+    gsap.utils.toArray(".card").forEach((card, i) => {
+      gsap.to(card, {
+        scrollTrigger: {
+          trigger: card,
+          start: "top 80%",
+          toggleActions: "play none none none"
+        },
+        rotationY: 180,
+        duration: 1.5,
+        ease: "power3.out"
+      });
+    });
+```
+
 
 ## 🚀 About Me
 **Papu Badatya**
