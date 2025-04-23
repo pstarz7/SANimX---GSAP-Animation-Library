@@ -482,6 +482,7 @@ tl.from("a",{
          gsap.from(".nav-item", { opacity: 0, y: 20, duration: 0.6, stagger: 0.2, ease: "power2.out" });
 
  ```
+
 ### 3D Card Flip on Scroll
 
 ```CSS
@@ -549,6 +550,450 @@ tl.from("a",{
       });
     });
 ```
+
+### Gradient Shift Parallax
+```CSS
+   .gradient-section {
+      min-height: 300vh;
+      background: linear-gradient(135deg, #6E40F7, #00F0B5);
+      position: relative;
+    }
+    
+    .content {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+      mix-blend-mode: overlay;
+    }
+    
+    @media (max-width: 768px) {
+      .content {
+        font-size: 2rem;
+      }
+    }
+```
+
+```HTML
+ <section class="gradient-section">
+    <div class="content">
+      <h1>Scroll to Shift Colors</h1>
+    </div>
+  </section>
+```
+```javascript
+    gsap.registerPlugin(ScrollTrigger);
+    
+    gsap.to(".gradient-section", {
+      background: "linear-gradient(135deg, #FF4D4D, #F9CB28)",
+      scrollTrigger: {
+        trigger: ".gradient-section",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: true
+      }
+    });
+```
+
+
+###  Perspective Tilt Scrolling
+
+```CSS
+.tilt-section {
+      min-height: 200vh;
+      perspective: 1000px;
+      padding: 20vh 0;
+    }
+    
+    .tilt-card {
+      width: 80%;
+      max-width: 600px;
+      height: 400px;
+      margin: 0 auto 50vh;
+      background: linear-gradient(45deg, #6E40F7, #00F0B5);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      transform-style: preserve-3d;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.2);
+    }
+    
+    @media (max-width: 768px) {
+      .tilt-card {
+        width: 90%;
+        height: 300px;
+      }
+    }
+```
+
+```HTML
+ <section class="tilt-section">
+    <div class="tilt-card">Card 1</div>
+    <div class="tilt-card">Card 2</div>
+    <div class="tilt-card">Card 3</div>
+  </section>
+```
+```javascript
+  gsap.registerPlugin(ScrollTrigger);
+    
+    gsap.utils.toArray(".tilt-card").forEach((card, i) => {
+      gsap.to(card, {
+        rotationX: -15,
+        rotationY: i % 2 ? 20 : -20,
+        scrollTrigger: {
+          trigger: card,
+          start: "top bottom",
+          end: "top center",
+          scrub: 1
+        }
+      });
+      
+      // Reset on mobile
+      ScrollTrigger.matchMedia({
+        "(max-width: 600px)": () => {
+          gsap.set(card, { rotationX: 0, rotationY: 0 });
+        }
+      });
+    });
+```
+    
+### Perspective Tilt Card (Hover + Scroll Reveal)
+```CSS
+   .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      perspective: 1000px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transform-style: preserve-3d;
+      will-change: transform;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+
+    @media (max-width: 768px) {
+      .cards-container {
+        grid-template-columns: 1fr;
+      }
+    }
+```
+
+```HTML
+  <div class="cards-container">
+    <div class="card">
+      <h3>Card 1</h3>
+      <p>Hover and scroll to see effects</p>
+    </div>
+
+ <div class="card">
+      <h3>Card 2</h3>
+      <p>Hover and scroll to see effects</p>
+    </div>
+
+<div class="card">
+      <h3>Card 3</h3>
+      <p>Hover and scroll to see effects</p>
+    </div>
+    <!-- Duplicate 5-6 cards -->
+  </div>
+```
+```javascript
+ gsap.registerPlugin(ScrollTrigger);
+
+    // Scroll reveal
+    gsap.to(".card", {
+      scrollTrigger: {
+        trigger: ".cards-container",
+        start: "top 80%",
+        toggleActions: "play none none none"
+      },
+      y: 0,
+      opacity: 1,
+      duration: 1,
+      stagger: 0.1,
+      ease: "back.out(1.2)"
+    });
+
+    // Hover tilt
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        gsap.to(card, {
+          rotationY: gsap.utils.mapRange(0, rect.width, -5, 5, x),
+          rotationX: gsap.utils.mapRange(0, rect.height, 5, -5, y),
+          duration: 0.5
+        });
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+          rotationY: 0,
+          rotationX: 0,
+          duration: 0.7,
+          ease: "elastic.out(1, 0.5)"
+        });
+      });
+    });
+```
+    
+###  Card Stack Expansion
+```CSS
+  .stack-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #6E40F7, #00F0B5);
+      color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      transform-origin: center top;
+    }
+
+    @media (min-width: 768px) {
+      .stack-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+      }
+      .card {
+        margin-bottom: 0;
+        transform: scale(0.9);
+        opacity: 0;
+      }
+    }
+```
+
+```HTML
+  <div class="stack-container">
+    <div class="card">
+      <h3>Feature 1</h3>
+      <p>Responsive card that transforms layout</p>
+    </div>
+
+  <div class="card">
+      <h3>Feature 2</h3>
+      <p>Responsive card that transforms layout</p>
+    </div>
+
+  <div class="card">
+      <h3>Feature 3</h3>
+      <p>Responsive card that transforms layout</p>
+    </div>
+ 
+    <!-- Add 5-6 cards -->
+  </div>
+```
+```javascript
+   gsap.registerPlugin(ScrollTrigger);
+
+    // Only animate on desktop
+    if (window.innerWidth >= 768) {
+      gsap.to(".card", {
+        scrollTrigger: {
+          trigger: ".stack-container",
+          start: "top 70%",
+          toggleActions: "play none none none"
+        },
+        scale: 1,
+        opacity: 1,
+        duration: 0.8,
+        stagger: {
+          each: 0.15,
+          from: "random"
+        },
+        ease: "back.out(1.7)"
+      });
+    }
+
+    // Handle resize
+    window.addEventListener('resize', () => {
+      ScrollTrigger.refresh();
+    });
+```
+
+### Horizontal Scrolling Gallery
+```CSS
+.horizontal-section {
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .horizontal-container {
+      display: flex;
+      height: 100%;
+    }
+    
+    .panel {
+      min-width: 100vw;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 5rem;
+      color: white;
+      position: relative;
+    }
+    
+    .panel:nth-child(odd) { background: #6E40F7; }
+    .panel:nth-child(even) { background: #00F0B5; }
+    
+    .parallax-element {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: #FF4D4D;
+      border-radius: 50%;
+    }
+```
+
+```HTML
+  <section class="horizontal-section">
+    <div class="horizontal-container">
+      <div class="panel">
+        <h2>Slide 1</h2>
+        <div class="parallax-element" style="top:20%; left:20%"></div>
+      </div>
+      <div class="panel">
+        <h2>Slide 2</h2>
+        <div class="parallax-element" style="bottom:30%; right:15%"></div>
+      </div>
+      <div class="panel">
+        <h2>Slide 3</h2>
+        <div class="parallax-element" style="top:50%; left:50%"></div>
+      </div>
+    </div>
+  </section>
+```
+```javascript
+  gsap.registerPlugin(ScrollTrigger);
+    
+    let panels = gsap.utils.toArray(".panel");
+    let container = document.querySelector(".horizontal-container");
+    
+    // Horizontal scroll
+    gsap.to(panels, {
+      xPercent: -100 * (panels.length - 1),
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".horizontal-section",
+        pin: true,
+        scrub: 1,
+        end: () => "+=" + (container.offsetWidth - window.innerWidth)
+      }
+    });
+    
+    // Parallax elements
+    gsap.utils.toArray(".parallax-element").forEach(el => {
+      gsap.to(el, {
+        y: 100,
+        scrollTrigger: {
+          containerAnimation: ScrollTrigger.getById("horizontal-scroll"),
+          trigger: el,
+          scrub: true
+        }
+      });
+    });
+```
+    
+### Staggered Grid Reveal
+```CSS
+ .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 30px;
+    width: 90%;
+    margin: 0 auto;
+  }
+  
+  .grid-item {
+    background: linear-gradient(135deg, #6E40F7, #00F0B5);
+    aspect-ratio: 1/1;
+    border-radius: 10px;
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  @media (max-width: 600px) {
+    .grid-container {
+      grid-template-columns: 1fr;
+      padding: 20px 15px;
+      gap: 15px;
+    }
+  }
+```
+
+```HTML
+  <div class="grid-container">
+    <!-- 9 grid items -->
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+    <div class="grid-item"></div>
+  </div>
+```
+```javascript
+ gsap.registerPlugin(ScrollTrigger);
+  
+  const gridAnimation = () => {
+    gsap.to(".grid-item", {
+      scrollTrigger: {
+        trigger: ".grid-container",
+        start: "top 80%",
+        toggleActions: "play none none none",
+        markers: false
+      },
+      opacity: 1,
+      scale: 1,
+      duration: 0.8,
+      stagger: {
+        each: window.innerWidth < 600 ? 0.05 : 0.1,
+        grid: "auto",
+        from: "center"
+      },
+      ease: "back.out(1.2)"
+    });
+  };
+
+  // Initialize and refresh on resize
+  gridAnimation();
+  window.addEventListener('resize', () => {
+    ScrollTrigger.refresh();
+    gsap.killTweensOf(".grid-item");
+    gridAnimation();
+  });
+```
+
 
 ### Morphing Card (Mobile-Friendly)
 
@@ -642,7 +1087,7 @@ tl.from("a",{
     }
 ```
 
-
+# Forms Effects
 
 ### Floating Label Input (3D Tilt on Focus)
 
@@ -762,18 +1207,744 @@ tl.from("a",{
 ```
 
 
+### Neon Glow Input (Scroll-Triggered Wave Effect)
+```CSS
+    .neon-section {
+      padding: 4rem 2rem;
+      background: #1a1a2e;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .neon-input {
+      width: 100%;
+      max-width: 500px;
+      margin: 2rem auto;
+      position: relative;
+    }
+    
+    .neon-input input {
+      width: 100%;
+      padding: 1rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #00F0B5;
+      color: white;
+      font-size: 1.1rem;
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    
+    .neon-input input:focus {
+      outline: none;
+    }
+    
+    .neon-input::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00F0B5, #FF4D4D, transparent);
+      box-shadow: 0 0 10px #00F0B5, 0 0 20px #FF4D4D;
+      transition: width 0.3s;
+    }
+    
+    .neon-input input:focus::after {
+      width: 100%;
+    }
+    
+    @media (max-width: 768px) {
+      .neon-section {
+        padding: 2rem 1rem;
+      }
+    }
+```
+
+```HTML
+  <section class="neon-section">
+    <div class="neon-input">
+      <input type="text" placeholder="Username">
+    </div>
+    <div class="neon-input">
+      <input type="email" placeholder="Email">
+    </div>
+    <div class="neon-input">
+      <input type="password" placeholder="Password">
+    </div>
+```
+
+```javascript
+ gsap.registerPlugin(ScrollTrigger);
+    
+    // Wave animation on scroll
+    gsap.utils.toArray(".neon-input").forEach((input, i) => {
+      gsap.to(input.querySelector("input"), {
+        scrollTrigger: {
+          trigger: input,
+          start: "top 80%",
+          toggleActions: "play none none none"
+        },
+        x: 0,
+        opacity: 1,
+        duration: 0.8,
+        delay: i * 0.2,
+        ease: "power3.out"
+      });
+      
+      // Animate the neon line
+      ScrollTrigger.create({
+        trigger: input,
+        start: "top 90%",
+        onEnter: () => {
+          gsap.fromTo(input.querySelector("input"), 
+            { boxShadow: "0 0 5px #00F0B5" },
+            { 
+              boxShadow: "0 0 20px #00F0B5, 0 0 40px #FF4D4D",
+              duration: 1,
+              yoyo: true,
+              repeat: 1 
+            }
+          );
+        }
+      });
+    });
+```
+
+### Material Input with Ripple Effect
+
+```CSS
+   .material-section {
+      padding: 4rem 2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .material-input {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      border-radius: 4px;
+      background: #f5f5f5;
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    
+    .material-input input {
+      width: 100%;
+      padding: 1.5rem 1rem 0.5rem;
+      border: none;
+      background: transparent;
+      font-size: 1rem;
+    }
+    
+    .material-input label {
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      color: #666;
+      transition: all 0.3s;
+    }
+    
+    .material-input .ripple {
+      position: absolute;
+      background: rgba(110, 64, 247, 0.2);
+      border-radius: 50%;
+      transform: scale(0);
+      pointer-events: none;
+      opacity: 0;
+    }
+    
+    .material-input input:focus + label {
+      top: 0.3rem;
+      font-size: 0.8rem;
+      color: #6E40F7;
+    }
+    
+    @media (max-width: 600px) {
+      .material-section {
+        padding: 2rem 1rem;
+      }
+    }
+```
+
+```HTML
+  <section class="material-section">
+    <div class="material-input">
+      <input type="text" id="m-name" required>
+      <label for="m-name">Full Name</label>
+    </div>
+    
+    <div class="material-input">
+      <input type="email" id="m-email" required>
+      <label for="m-email">Email</label>
+    </div>
+    
+    <div class="material-input">
+      <input type="password" id="m-pass" required>
+      <label for="m-pass">Password</label>
+    </div>
+  </section>
+```
+
+```javascript
+  gsap.registerPlugin(ScrollTrigger);
+    
+    // Scroll entrance
+    gsap.to(".material-input", {
+      scrollTrigger: {
+        trigger: ".material-section",
+        start: "top 70%",
+        toggleActions: "play none none none"
+      },
+      scale: 1,
+      opacity: 1,
+      duration: 0.7,
+      stagger: 0.15,
+      ease: "elastic.out(1, 0.5)"
+    });
+    
+    // Ripple effect
+    document.querySelectorAll('.material-input').forEach(container => {
+      const input = container.querySelector('input');
+      
+      input.addEventListener('focus', (e) => {
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        container.appendChild(ripple);
+        
+        const rect = container.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size/2;
+        const y = e.clientY - rect.top - size/2;
+        
+        gsap.set(ripple, {
+          width: size,
+          height: size,
+          left: x,
+          top: y
+        });
+        
+        gsap.to(ripple, {
+          scale: 3,
+          opacity: 1,
+          duration: 0.6,
+          ease: "power2.out",
+          onComplete: () => {
+            ripple.remove();
+          }
+        });
+      });
+    });
+```
+# Video Ccroll Effects
+###  Scroll-Activated Video Parallax
+Effect: Video playback speed tied to scroll position
+
+
+```CSS
+.video-section {
+      height: 300vh;
+      position: relative;
+    }
+    
+    .video-container {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+    }
+    
+    @media (max-width: 768px) {
+      .overlay {
+        font-size: 2rem;
+      }
+    }
+```
+
+```HTML
+  <section class="video-section">
+    <div class="video-container">
+      <video src="parallax-video.mp4" muted loop></video>
+      <div class="overlay">
+        <h1>Scroll to Control Video</h1>
+      </div>
+    </div>
+  </section>
+
+```
+
+```javascript
+  gsap.registerPlugin(ScrollTrigger);
+    
+    const video = document.querySelector('video');
+    video.playbackRate = 0.5;
+    
+    ScrollTrigger.create({
+      trigger: ".video-section",
+      start: "top top",
+      end: "bottom bottom",
+      onUpdate: (self) => {
+        video.currentTime = video.duration * self.progress;
+      }
+    });
+    
+    // Mobile fallback
+    ScrollTrigger.matchMedia({
+      "(max-width: 600px)": () => {
+        video.playbackRate = 1;
+        video.autoplay = true;
+      }
+    });
+```
+
+
+### Parallax Video Reveal (Mask Animation)
+Effect: Video reveals through dynamic shapes as you scroll
+
+
+```CSS
+ .video-mask-section {
+      height: 300vh;
+      position: relative;
+      background: #000;
+    }
+    
+    .video-container {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .masked-video {
+      width: 80%;
+      height: 80%;
+      object-fit: cover;
+      clip-path: circle(10% at 50% 50%);
+    }
+    
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      text-align: center;
+      z-index: 10;
+      mix-blend-mode: difference;
+    }
+    
+    @media (max-width: 768px) {
+      .masked-video {
+        width: 100%;
+        height: 60%;
+      }
+    }
+```
+
+```HTML
+  <section class="video-mask-section">
+    <div class="video-container">
+      <video class="masked-video" src="reveal-video.mp4" muted loop></video>
+      <div class="content">
+        <h1>Scroll to Reveal</h1>
+      </div>
+    </div>
+  </section>
+```
+```javascript
+ gsap.registerPlugin(ScrollTrigger);
+    
+    const video = document.querySelector('.masked-video');
+    
+    // Video scrub
+    ScrollTrigger.create({
+      trigger: ".video-mask-section",
+      start: "top top",
+      end: "bottom bottom",
+      onUpdate: self => {
+        video.currentTime = video.duration * self.progress;
+      }
+    });
+    
+    // Mask animation
+    gsap.to(".masked-video", {
+      clipPath: "circle(100% at 50% 50%)",
+      scrollTrigger: {
+        trigger: ".video-mask-section",
+        start: "top center",
+        end: "bottom center",
+        scrub: true
+      }
+    });
+    
+    // Mobile fallback
+    ScrollTrigger.matchMedia({
+      "(max-width: 600px)": () => {
+        gsap.set(".masked-video", { clipPath: "circle(75% at 50% 50%)" });
+        video.autoplay = true;
+      }
+    });
+```
+    
+
+
+### Video Depth Wipe (Foreground/Background)
+Effect: Foreground video scrubs while background video plays continuously
+
+
+```CSS
+ .video-wipe-section {
+      height: 400vh;
+      position: relative;
+    }
+    
+    .background-video, .foreground-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+    
+    .foreground-video {
+      z-index: 2;
+      clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    }
+    
+    .content {
+      position: relative;
+      z-index: 3;
+      color: white;
+      padding: 20vh 10vw;
+      mix-blend-mode: difference;
+    }
+    
+    @media (max-width: 768px) {
+      .foreground-video {
+        display: none;
+      }
+      .content {
+        padding: 10vh 5vw;
+      }
+    }
+```
+
+```HTML
+  <section class="video-wipe-section">
+    <video class="background-video" src="bg-loop.mp4" muted loop autoplay></video>
+    <video class="foreground-video" src="fg-scrub.mp4" muted></video>
+    <div class="content">
+      <h1>Scroll to Wipe Between Videos</h1>
+    </div>
+  </section>
+```
+```javascript
+  gsap.registerPlugin(ScrollTrigger);
+    
+    const foregroundVideo = document.querySelector('.foreground-video');
+    
+    // Foreground video scrub
+    ScrollTrigger.create({
+      trigger: ".video-wipe-section",
+      start: "top top",
+      end: "bottom bottom",
+      onUpdate: self => {
+        foregroundVideo.currentTime = foregroundVideo.duration * self.progress;
+      }
+    });
+    
+    // Wipe animation
+    gsap.to(".foreground-video", {
+      clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+      scrollTrigger: {
+        trigger: ".video-wipe-section",
+        start: "top center",
+        end: "bottom center",
+        scrub: true
+      }
+    });
+```
 
 
 
 
 
+# Button HOver Effects
+
+###  Minimal Border Draw Effect
+
+```CSS
+   .btn-draw {
+      position: relative;
+      padding: 1rem 2rem;
+      background: transparent;
+      border: none;
+      color: #222;
+      font-size: 1rem;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    
+    .btn-draw::before,
+    .btn-draw::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: #222;
+      transition: width 0.3s ease;
+    }
+    
+    .btn-draw::before {
+      top: 0;
+      left: 0;
+    }
+    
+    .btn-draw::after {
+      bottom: 0;
+      right: 0;
+    }
+    
+    .btn-draw:hover::before,
+    .btn-draw:hover::after {
+      width: 100%;
+    }
+    
+    @media (max-width: 768px) {
+      .btn-draw {
+        padding: 0.8rem 1.5rem;
+      }
+    }
+```
+
+```HTML
+ <button class="btn-draw">Explore</button>
+```
+
+###  Subtle Fill Animation   
+```CSS
+ .btn-fill {
+      position: relative;
+      padding: 1rem 2rem;
+      border: 2px solid #222;
+      background: transparent;
+      color: #222;
+      font-size: 1rem;
+      cursor: pointer;
+      overflow: hidden;
+      transition: color 0.3s;
+      z-index: 1;
+    }
+    
+    .btn-fill::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: #222;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s, height 0.4s;
+      z-index: -1;
+    }
+    
+    .btn-fill:hover {
+      color: white;
+    }
+    
+    .btn-fill:hover::before {
+      width: 200%;
+      height: 200%;
+    }
+    
+    @media (max-width: 768px) {
+      .btn-fill {
+        padding: 0.8rem 1.5rem;
+      }
+    }
+  </st
+```
+
+```HTML
+  <button class="btn-fill">Discover</button>
+
+```
 
 
+### Underline Swipe Effect
+
+```CSS
+ .btn-swipe {
+      position: relative;
+      padding: 1rem 2rem;
+      border: none;
+      background: transparent;
+      color: #222;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    
+    .btn-swipe::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: #222;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    
+    .btn-swipe:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    
+    @media (max-width: 768px) {
+      .btn-swipe {
+        padding: 0.8rem 1.5rem;
+      }
+    }
+```
+
+```HTML
+  <button class="btn-swipe">View Collection</button>
+
+```
 
 
+### 3D Lift Effect
+
+```CSS
+  .btn-lift {
+      padding: 1rem 2rem;
+      border: none;
+      background: #222;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .btn-lift:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .btn-lift:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    @media (max-width: 768px) {
+      .btn-lift {
+        padding: 0.8rem 1.5rem;
+      }
+    }
+```
+
+```HTML
+  <button class="btn-lift">Add to Cart</button>
+
+```
 
 
+###  Text Swap Animation
+```CSS
+    .btn-swap {
+      position: relative;
+      padding: 1rem 2rem;
+      border: 1px solid #222;
+      background: transparent;
+      color: #222;
+      font-size: 1rem;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    
+    .btn-swap span {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    
+    .btn-swap span:last-child {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, 150%);
+    }
+    
+    .btn-swap:hover span:first-child {
+      transform: translateY(-150%);
+    }
+    
+    .btn-swap:hover span:last-child {
+      transform: translate(-50%, -50%);
+    }
+    
+    @media (max-width: 768px) {
+      .btn-swap {
+        padding: 0.8rem 1.5rem;
+      }
+    }
+```
 
+```HTML
+ <button class="btn-swap">
+    <span>Subscribe</span>
+    <span>Thank You!</span>
+  </button>
+```
+
+#Stay Update with SANimX For Upcoming Effects
+
+###
+```CSS
+
+```
+
+```HTML
+
+```
+```javascript
+
+```
 
 
 
