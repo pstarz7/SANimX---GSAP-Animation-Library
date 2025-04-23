@@ -520,9 +520,7 @@ Let’s connect!
 
 
 ## 📜 License  
-SANimX is open-source and released under the [MIT License](LICENSE).  
-
-MIT License
+SANimX is open-source and released under the MIT License
 
 Copyright (c) [2025] [papu badatya]
 
