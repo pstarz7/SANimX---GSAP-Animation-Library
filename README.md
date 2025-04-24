@@ -1993,6 +1993,6 @@ Let’s connect!
 
 
 ## 📜 License  
-SANimX is open-source and released under the [ MIT License]([https://greensock.com/docs/v3/Eases](https://github.com/pstarz7/SANimX---GSAP-Animation-Library/blob/main/License)).
+SANimX is open-source and released under the [ MIT License](https://github.com/pstarz7/SANimX---GSAP-Animation-Library/blob/main/License).
 
 
