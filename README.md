@@ -1,4 +1,6 @@
 [![Open Source](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
+![Green Sock](https://img.shields.io/badge/green%20sock-88CE02?style=for-the-badge&logo=greensock&logoColor=white)
+[![Free to Use](https://img.shields.io/badge/Free-🚀-orange)](https://github.com/your-repo)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 # **SANimX:** Open-Source GSAP Animation Library
