@@ -1,7 +1,7 @@
 [![Open Source](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
 ![Green Sock](https://img.shields.io/badge/green%20sock-88CE02?style=for-the-badge&logo=greensock&logoColor=white)
 [![Free to Use](https://img.shields.io/badge/Free-🚀-orange)](https://github.com/your-repo)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 
 # **SANimX:** Open-Source GSAP Animation Library
 A ready-to-use GSAP animation library that you can simply copy and paste into your projects.
@@ -1994,7 +1994,6 @@ Let’s connect!
 **Animation:** javaScript, GSAP, HTML AND CSS
 
 
-## 📜 License  
-SANimX is open-source and released under the [ MIT License](https://github.com/pstarz7/SANimX---GSAP-Animation-Library/blob/main/License).
+
 
 
