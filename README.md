@@ -2010,7 +2010,7 @@ Effect: Foreground video scrubs while background video plays continuously
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agency Partners Marquee</title>
+  <title>SANimX GSAP Marquee</title>
 </head>
 <body>
   <section class="partners-section">
