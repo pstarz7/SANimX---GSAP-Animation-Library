@@ -1940,6 +1940,151 @@ Effect: Foreground video scrubs while background video plays continuously
   </button>
 ```
 
+# MARQUEE Effects
+```CSS
+ .partners-section {
+      padding: 4rem 0;
+      background: #f8f8f8;
+      overflow: hidden;
+    }
+    
+    .marquee-container {
+      display: flex;
+      width: 100%;
+      position: relative;
+    }
+    
+    .marquee-track {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+      padding: 1rem 0;
+      will-change: transform;
+    }
+    
+    .marquee-item {
+      flex: 0 0 auto;
+      width: 160px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: grayscale(100%);
+      opacity: 0.7;
+      transition: all 0.3s ease;
+    }
+    
+    .marquee-item:hover {
+      filter: grayscale(0);
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    
+    .marquee-item img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    
+    @media (max-width: 768px) {
+      .marquee-item {
+        width: 120px;
+        height: 60px;
+      }
+      .marquee-track {
+        gap: 2rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .marquee-item {
+        width: 100px;
+        height: 50px;
+      }
+    }
+```
+
+```HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agency Partners Marquee</title>
+</head>
+<body>
+  <section class="partners-section">
+    <div class="marquee-container">
+      <div class="marquee-track" id="marquee1">
+        <!-- Partner Logos - Duplicate for seamless loop -->
+        <div class="marquee-item"><img src="logo1.svg" alt="Partner 1"></div>
+        <div class="marquee-item"><img src="logo2.svg" alt="Partner 2"></div>
+        <div class="marquee-item"><img src="logo3.svg" alt="Partner 3"></div>
+        <div class="marquee-item"><img src="logo4.svg" alt="Partner 4"></div>
+        <div class="marquee-item"><img src="logo5.svg" alt="Partner 5"></div>
+        <div class="marquee-item"><img src="logo6.svg" alt="Partner 6"></div>
+        <!-- Mirrored for seamless loop -->
+        <div class="marquee-item"><img src="logo1.svg" alt="Partner 1"></div>
+        <div class="marquee-item"><img src="logo2.svg" alt="Partner 2"></div>
+        <div class="marquee-item"><img src="logo3.svg" alt="Partner 3"></div>
+        <div class="marquee-item"><img src="logo4.svg" alt="Partner 4"></div>
+        <div class="marquee-item"><img src="logo5.svg" alt="Partner 5"></div>
+        <div class="marquee-item"><img src="logo6.svg" alt="Partner 6"></div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
+```
+```javascript
+    document.addEventListener('DOMContentLoaded', () => {
+      const marquee = document.getElementById('marquee1');
+      const items = gsap.utils.toArray('.marquee-item');
+      const speed = 100; // pixels per second
+      
+      // Calculate total width
+      let totalWidth = 0;
+      items.forEach(item => {
+        totalWidth += item.offsetWidth + parseInt(getComputedStyle(item).marginRight);
+      });
+      
+      // Duplicate items for seamless looping
+      const clone = marquee.cloneNode(true);
+      marquee.parentNode.appendChild(clone);
+      
+      // Animation
+      const tl = gsap.timeline({
+        repeat: -1,
+        defaults: { ease: "none" }
+      });
+      
+      tl.to([marquee, clone], {
+        x: `-=${totalWidth/2}`,
+        duration: totalWidth / speed,
+        modifiers: {
+          x: gsap.utils.unitize(x => parseFloat(x) % (totalWidth/2))
+        }
+      });
+      
+      // Responsive handling
+      function handleResize() {
+        totalWidth = 0;
+        items.forEach(item => {
+          totalWidth += item.offsetWidth + parseInt(getComputedStyle(item).marginRight);
+        });
+        tl.invalidate();
+      }
+      
+      window.addEventListener('resize', handleResize);
+      
+      // Cleanup
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        tl.kill();
+      };
+    });
+```
+
 # Stay Update with SANimX For Upcoming Effects
 
 ###
