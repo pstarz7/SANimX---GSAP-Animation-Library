@@ -2005,14 +2005,7 @@ Effect: Foreground video scrubs while background video plays continuously
 ```
 
 ```HTML
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SANimX GSAP Marquee</title>
-</head>
-<body>
+
   <section class="partners-section">
     <div class="marquee-container">
       <div class="marquee-track" id="marquee1">
@@ -2033,8 +2026,6 @@ Effect: Foreground video scrubs while background video plays continuously
       </div>
     </div>
   </section>
-</body>
-</html>
 ```
 ```javascript
     document.addEventListener('DOMContentLoaded', () => {
