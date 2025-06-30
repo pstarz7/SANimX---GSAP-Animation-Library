@@ -2078,7 +2078,7 @@ Effect: Foreground video scrubs while background video plays continuously
 
 ## 𝗖𝗿𝗲𝗮𝘁𝗶𝘃𝗲 𝗖𝘂𝗿𝘀𝗼𝗿 𝗧𝗿𝗮𝗶𝗹 𝗘𝗳𝗳𝗲𝗰𝘁 
 
-# Particle Trail Cursor
+### Particle Trail Cursor
 ```CSS
  body {
       cursor: none;
@@ -2194,6 +2194,274 @@ Effects are applied to the <body> tag
       particles.forEach(p => p.element.style.display = 'none');
     }
 ```
+
+### Magnetic Ripple Cursor
+
+```CSS
+ body {
+      cursor: none;
+      margin: 0;
+      min-height: 100vh;
+      background: #f0f0f0;
+    }
+    
+    .cursor-magnetic {
+      width: 30px;
+      height: 30px;
+      border: 2px solid #6E40F7;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transform: translate(-50%, -50%);
+    }
+    
+    .cursor-ripple {
+      position: fixed;
+      border: 1px solid #00F0B5;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        cursor: default;
+      }
+      .cursor-magnetic, .cursor-ripple {
+        display: none;
+      }
+    }
+```
+
+```HTML
+Effects are applied to the <body> tag
+```
+```javascript
+ const cursor = document.createElement('div');
+    cursor.classList.add('cursor-magnetic');
+    document.body.appendChild(cursor);
+    
+    let mouseX = 0, mouseY = 0;
+    let posX = 0, posY = 0;
+    let ripple = null;
+    let rippleSize = 0;
+    
+    // Track mouse position
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      // Create ripple on click
+      if (e.buttons === 1 && !ripple) {
+        createRipple(e.clientX, e.clientY);
+      }
+    });
+    
+    // Click effect
+    document.addEventListener('mousedown', (e) => {
+      if (ripple) return;
+      createRipple(e.clientX, e.clientY);
+    });
+    
+    function createRipple(x, y) {
+      ripple = document.createElement('div');
+      ripple.classList.add('cursor-ripple');
+      document.body.appendChild(ripple);
+      
+      gsap.set(ripple, {
+        x: x,
+        y: y,
+        width: 10,
+        height: 10,
+        opacity: 1
+      });
+      
+      gsap.to(ripple, {
+        width: 100,
+        height: 100,
+        opacity: 0,
+        duration: 1,
+        ease: "power2.out",
+        onComplete: () => {
+          ripple.remove();
+          ripple = null;
+        }
+      });
+    }
+    
+    // Magnetic animation
+    gsap.ticker.add(() => {
+      // Smooth follow
+      posX += (mouseX - posX) / 6;
+      posY += (mouseY - posY) / 6;
+      
+      gsap.set(cursor, {
+        x: posX,
+        y: posY
+      });
+      
+      // Magnetic effect on hoverable elements
+      const hoverables = document.querySelectorAll('a, button, [data-cursor-magnetic]');
+      hoverables.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          gsap.to(cursor, {
+            scale: 0.5,
+            duration: 0.3,
+            backgroundColor: "rgba(110, 64, 247, 0.5)"
+          });
+        });
+        
+        el.addEventListener('mouseleave', () => {
+          gsap.to(cursor, {
+            scale: 1,
+            duration: 0.3,
+            backgroundColor: "transparent"
+          });
+        });
+      });
+    });
+    
+    // Touch device detection
+    if ('ontouchstart' in window || navigator.maxTouchPoints) {
+      document.body.style.cursor = 'default';
+      cursor.style.display = 'none';
+    }
+```
+### Laser Trail Cursor
+
+```CSS
+body {
+      cursor: none;
+      margin: 0;
+      min-height: 100vh;
+      background: #111;
+      overflow-x: hidden;
+    }
+    
+    .cursor-laser {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: #FF4D4D;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      filter: blur(1px) drop-shadow(0 0 5px #FF4D4D);
+      transform: translate(-50%, -50%);
+    }
+    
+    .laser-trail {
+      position: fixed;
+      height: 2px;
+      background: linear-gradient(90deg, #FF4D4D, transparent);
+      transform-origin: left center;
+      pointer-events: none;
+      z-index: 9998;
+      filter: drop-shadow(0 0 3px #FF4D4D);
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        cursor: default;
+      }
+      .cursor-laser, .laser-trail {
+        display: none;
+      }
+    }
+```
+
+```HTML
+Effects are applied to the <body> tag
+```
+```javascript
+ const cursor = document.createElement('div');
+    cursor.classList.add('cursor-laser');
+    document.body.appendChild(cursor);
+    
+    const trail = document.createElement('div');
+    trail.classList.add('laser-trail');
+    document.body.appendChild(trail);
+    
+    let mouseX = 0, mouseY = 0;
+    let prevX = 0, prevY = 0;
+    let trailLength = 0;
+    
+    // Track mouse position
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+    
+    // Animation loop
+    gsap.ticker.add(() => {
+      // Calculate distance moved
+      const dx = mouseX - prevX;
+      const dy = mouseY - prevY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      // Update trail length based on speed
+      trailLength = gsap.utils.clamp(50, 200, distance * 3);
+      
+      // Update cursor position
+      gsap.set(cursor, {
+        x: mouseX,
+        y: mouseY
+      });
+      
+      // Update trail
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      
+      gsap.set(trail, {
+        x: prevX,
+        y: prevY,
+        width: trailLength,
+        rotation: angle,
+        opacity: distance > 2 ? 0.8 : 0
+      });
+      
+      prevX = mouseX;
+      prevY = mouseY;
+    });
+    
+    // Interactive elements effect
+    document.querySelectorAll('a, button, [data-cursor-hover]').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        gsap.to(cursor, {
+          scale: 2,
+          duration: 0.2,
+          backgroundColor: "#00F0B5"
+        });
+        gsap.to(trail, {
+          backgroundColor: "linear-gradient(90deg, #00F0B5, transparent)",
+          duration: 0.2
+        });
+      });
+      
+      el.addEventListener('mouseleave', () => {
+        gsap.to(cursor, {
+          scale: 1,
+          duration: 0.2,
+          backgroundColor: "#FF4D4D"
+        });
+        gsap.to(trail, {
+          backgroundColor: "linear-gradient(90deg, #FF4D4D, transparent)",
+          duration: 0.2
+        });
+      });
+    });
+    
+    // Touch device fallback
+    if ('ontouchstart' in window || navigator.maxTouchPoints) {
+      document.body.style.cursor = 'default';
+      cursor.style.display = 'none';
+      trail.style.display = 'none';
+    }
+```
+
 
 
 # Stay Update with SANimX For Upcoming Effects
