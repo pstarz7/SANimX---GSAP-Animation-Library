@@ -2076,7 +2076,9 @@ Effect: Foreground video scrubs while background video plays continuously
     });
 ```
 
-###
+## 𝗖𝗿𝗲𝗮𝘁𝗶𝘃𝗲 𝗖𝘂𝗿𝘀𝗼𝗿 𝗧𝗿𝗮𝗶𝗹 𝗘𝗳𝗳𝗲𝗰𝘁 
+
+# Particle Trail Cursor
 ```CSS
  body {
       cursor: none;
@@ -2117,9 +2119,7 @@ Effect: Foreground video scrubs while background video plays continuously
       }
     }
 ```
-## 𝗖𝗿𝗲𝗮𝘁𝗶𝘃𝗲 𝗖𝘂𝗿𝘀𝗼𝗿 𝗧𝗿𝗮𝗶𝗹 𝗘𝗳𝗳𝗲𝗰𝘁 
 
-#Particle Trail Cursor
 ```HTML
 Effects are applied to the <body> tag
 ```
