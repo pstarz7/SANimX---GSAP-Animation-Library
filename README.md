@@ -2076,6 +2076,126 @@ Effect: Foreground video scrubs while background video plays continuously
     });
 ```
 
+###
+```CSS
+ body {
+      cursor: none;
+      margin: 0;
+      overflow-x: hidden;
+      min-height: 100vh;
+      background: #0f0f1a;
+    }
+    
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: #00F0B5;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      mix-blend-mode: exclusion;
+      z-index: 9999;
+    }
+    
+    .cursor-particle {
+      position: fixed;
+      width: 4px;
+      height: 4px;
+      background: #6E40F7;
+      border-radius: 50%;
+      pointer-events: none;
+      mix-blend-mode: exclusion;
+      z-index: 9998;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        cursor: default;
+      }
+      .cursor-dot, .cursor-particle {
+        display: none;
+      }
+    }
+```
+## 𝗖𝗿𝗲𝗮𝘁𝗶𝘃𝗲 𝗖𝘂𝗿𝘀𝗼𝗿 𝗧𝗿𝗮𝗶𝗹 𝗘𝗳𝗳𝗲𝗰𝘁 
+
+#Particle Trail Cursor
+```HTML
+Effects are applied to the <body> tag
+```
+```javascript
+ // Main cursor dot
+    const cursorDot = document.createElement('div');
+    cursorDot.classList.add('cursor-dot');
+    document.body.appendChild(cursorDot);
+    
+    // Particle array
+    const particles = [];
+    const particleCount = 12;
+    
+    // Create particles
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('cursor-particle');
+      document.body.appendChild(particle);
+      particles.push({
+        element: particle,
+        x: 0, y: 0,
+        delay: i * 0.02,
+        size: Math.random() * 3 + 2
+      });
+    }
+    
+    // Track mouse position
+    let mouseX = 0, mouseY = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+    
+    // Animation loop
+    gsap.ticker.add(() => {
+      // Main cursor
+      gsap.to(cursorDot, {
+        x: mouseX - 4,
+        y: mouseY - 4,
+        duration: 0.2,
+        ease: "power2.out"
+      });
+      
+      // Particles
+      particles.forEach((particle, i) => {
+        const delay = particle.delay;
+        const targetX = mouseX - particle.size/2;
+        const targetY = mouseY - particle.size/2;
+        
+        gsap.to(particle.element, {
+          x: targetX,
+          y: targetY,
+          duration: 0.5,
+          delay: delay,
+          ease: "power2.out",
+          width: particle.size,
+          height: particle.size,
+          opacity: 0.7 - (i/particleCount * 0.5)
+        });
+      });
+    });
+    
+    // Disable on touch devices
+    const isTouchDevice = () => {
+      return 'ontouchstart' in window || navigator.maxTouchPoints;
+    };
+    
+    if (isTouchDevice()) {
+      document.body.style.cursor = 'default';
+      cursorDot.style.display = 'none';
+      particles.forEach(p => p.element.style.display = 'none');
+    }
+```
+
+
 # Stay Update with SANimX For Upcoming Effects
 
 ###
